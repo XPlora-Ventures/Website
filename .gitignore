@@ -1,0 +1,5 @@
+# Reference-only material, not used by the live site
+newsroom/
+video/
+Cloud.png*.png
+Energy.html

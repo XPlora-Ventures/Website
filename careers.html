@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers — Xplora</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/tasa-explorer@5.0.8/index.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Page-specific overrides only — shared rules live in styles.css */
+
+        /* This page has no light hero photo behind the header (unlike the
+           home page, where the default dark-navy nav text is tuned for
+           contrast against that image) — so nav text needs to be light
+           from the start, not just after .scrolled kicks in. */
+        nav ul li a {
+            color: #ffffff;
+            opacity: 1;
+        }
+
+        /* --- Careers hero intro --- */
+        .hero-intro {
+            max-width: 700px;
+            margin: 30px auto 0;
+        }
+
+        .hero-intro p {
+            color: var(--cyan-light);
+            opacity: 0.85;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .hero-intro p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* --- Current openings --- */
+        .roles-section {
+            padding: 140px 8%;
+            position: relative;
+            border-top: 1px solid rgba(193, 235, 239, 0.1);
+        }
+
+        .roles-section h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            max-width: 700px;
+            line-height: 1.2;
+            margin-bottom: 30px;
+        }
+
+        .roles-empty {
+            max-width: 600px;
+            color: var(--cyan-light);
+            opacity: 0.85;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        /* --- Register your interest --- */
+        .cv-section {
+            padding: 140px 8%;
+            position: relative;
+            border-top: 1px solid rgba(193, 235, 239, 0.1);
+            text-align: center;
+        }
+
+        .cv-section h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            max-width: 700px;
+            line-height: 1.2;
+            margin: 0 auto 20px;
+        }
+
+        .cv-intro {
+            max-width: 600px;
+            margin: 0 auto 50px;
+            color: var(--cyan-light);
+            opacity: 0.85;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        .cv-section .hero-cta {
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader: cycles taglines + a circular progress ring while the page settles -->
+    <div id="preloader">
+        <div class="loader-ring">
+            <svg viewBox="0 0 84 84">
+                <circle class="track" cx="42" cy="42" r="40"></circle>
+                <circle class="progress" cx="42" cy="42" r="40"></circle>
+            </svg>
+            <span class="loader-pct" id="loaderPct">0%</span>
+        </div>
+        <div class="loader-text" id="loaderText"></div>
+    </div>
+
+    <header id="siteHeader">
+        <a href="prototype.html#home" class="logo">
+            <img src="Logo/logo_white.png" alt="Logo" class="logo-graphic">
+        </a>
+        <nav id="siteNav">
+            <ul>
+                <li><a href="Our-Technology.html">Our Technology</a></li>
+                <li><a href="about.html">About us</a></li>
+                <li><a href="newsroom.html">Newsroom</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <a href="mailto:hello@xploraventures.com" class="nav-cta">Contact</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Careers hero -->
+    <section class="section-content solution-section" id="careers">
+        <h2 class="mission-statement" aria-label="LAUNCH YOUR CAREER">
+            <span class="typewriter" aria-hidden="true">LAUNCH YOUR CAREER</span><span class="caret" aria-hidden="true"></span>
+        </h2>
+        <div class="hero-intro fade-up" style="--reveal-delay:0.05s">
+            <p>At Xplora, we are building innovative solutions to real-world challenges and we welcome people who are excited to be part of this journey.</p>
+            <p>This is a place where you will be trusted with real responsibility from day one, contribute to projects that truly matter, and be supported by like-minded people. We embrace challenges and ambiguity as part of building something meaningful.</p>
+        </div>
+    </section>
+
+    <!-- Current openings -->
+    <section class="roles-section" id="openings">
+        <span class="eyebrow fade-up">Careers</span>
+        <h2 class="fade-up" style="--reveal-delay:0.05s">Current openings</h2>
+
+        <!-- No roles are open right now. When one opens, add it here as
+             an accordion item — same expand/collapse pattern already used
+             elsewhere on the site (e.g. the "How it works" page), and the
+             click handler in main.js already supports any .accordion group
+             with zero extra JS. Example:
+        <div class="accordion">
+            <div class="accordion-item">
+                <div class="accordion-head">
+                    <div class="accordion-num">1</div>
+                    <h3>Role Title</h3>
+                    <div class="accordion-plus"><span></span><span></span></div>
+                </div>
+                <div class="accordion-panel">
+                    <div class="accordion-panel-inner">Role description, requirements, and how to apply.</div>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <p class="roles-empty fade-up" style="--reveal-delay:0.1s">There are no open roles right now.</p>
+    </section>
+
+    <!-- Register your interest -->
+    <section class="cv-section" id="register-interest">
+        <span class="eyebrow fade-up">Stay in the loop</span>
+        <h2 class="fade-up" style="--reveal-delay:0.05s">Register your interest.</h2>
+        <p class="cv-intro fade-up" style="--reveal-delay:0.1s">Don't see an open role that fits? We're always keen to hear from people who want to help solve industrial decarbonisation. Email your CV and cover letter to us and we'll be in touch.</p>
+
+        <div class="hero-cta fade-up" style="--reveal-delay:0.15s">
+            <a href="mailto:hello@xploraventures.com" class="btn">Email us</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-left">
+                <div class="footer-statement reveal-line"><span>Energy volatility is rising, electrification is accelerating. The world needs better tools to manage heat.</span></div>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>Follow Us</h4>
+                    <a href="https://www.linkedin.com/company/xploraventures/" target="_blank">LinkedIn</a>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <a href="mailto:hello@xploraventures.com">hello@xploraventures.com</a>
+                    <address>
+                        <p>69 Gracefield Road</p>
+                        <p>Lower Hutt, Wellington</p>
+                    </address>
+                </div>
+                <div>
+                    <h4>Navigate</h4>
+                    <a href="Our-Technology.html">Our Technology</a>
+                    <a href="about.html">About us</a>
+                    <a href="newsroom.html">Newsroom</a>
+                    <a href="careers.html">Careers</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="legal-links">
+                <a href="#">Cookie Policy</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <small>© 2026 Xplora. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <!-- GSAP + ScrollTrigger for parallax; Lenis for smooth scroll -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script defer src="main.js"></script>
+</body>
+</html>

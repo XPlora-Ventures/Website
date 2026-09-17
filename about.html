@@ -1,0 +1,409 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — Xplora</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/tasa-explorer@5.0.8/index.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Page-specific overrides only — shared rules live in styles.css */
+
+        /* This page has no light hero photo behind the header (unlike the
+           home page, where the default dark-navy nav text is tuned for
+           contrast against that image) — so nav text needs to be light
+           from the start, not just after .scrolled kicks in. */
+        nav ul li a {
+            color: #ffffff;
+            opacity: 1;
+        }
+
+        /* --- About/CTA hero text ---
+           Sized up for this page's hero (reusing .mission-statement's scale). */
+        .cta-section {
+            padding: 250px 8%;
+        }
+
+        .cta-section h2.mission-statement {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            max-width: 860px;
+            margin: 0 auto 24px;
+        }
+
+        .cta-section p {
+            max-width: 620px;
+            font-size: 18px;
+        }
+
+        /* 11 Redactor — a scanning bar sweeps the sentence, lighting it as it
+           passes. Font/size NOT overridden (unlike the original snippet) so
+           it keeps this page's brand type/scale from .mission-statement —
+           only the gradient-sweep + scan-bar animation is borrowed. No JS
+           needed: this runs directly on the heading's own text. */
+        :root { --ink: #ffffff; --ink-2: #FF5C1A; --ink-3: #8DD8DE; }
+
+        .fx-scanner {
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(90deg,
+                color-mix(in srgb, var(--ink) 25%, transparent) 0 40%,
+                var(--ink) 50%,
+                color-mix(in srgb, var(--ink) 25%, transparent) 60% 100%
+              ) 0 0 / 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fx-scan-glow 2.6s ease-in-out infinite alternate;
+        }
+
+        .fx-scanner::after {
+            content: "";
+            position: absolute;
+            top: -6px;
+            bottom: -6px;
+            left: 0;
+            width: 3px;
+            background: var(--ink-2);
+            box-shadow: 0 0 14px var(--ink-2);
+            animation: fx-scan-bar 2.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes fx-scan-glow {
+            0%   { background-position: 100% 0; }
+            100% { background-position: 0% 0; }
+        }
+
+        @keyframes fx-scan-bar {
+            0%   { left: 0; transform: translateX(0); }
+            100% { left: 100%; transform: translateX(-100%); }
+        }
+
+        /* --- Our team --- */
+        .team-section {
+            padding: 140px 8%;
+            position: relative;
+            border-top: 1px solid rgba(193, 235, 239, 0.1);
+        }
+
+        .team-section h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            max-width: 700px;
+            line-height: 1.2;
+            margin-bottom: 50px;
+        }
+
+        .team-track {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .team-track::-webkit-scrollbar { display: none; }
+
+        .team-card {
+            /* exactly 4 cards fill the row (accounting for the 3 gaps
+               between them) — the rest sit off-screen until scrolled/scrubbed into view */
+            flex: 0 0 calc((100% - 3 * 24px) / 4);
+            scroll-snap-align: start;
+        }
+
+        .team-card .graphic-slot {
+            aspect-ratio: 3 / 4;
+        }
+
+        .team-photo {
+            display: block;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        /* Hover feedback on the photo/placeholder only (not the name/role
+           text below it) — same recipe as the .nav-cta "glass" button: a
+           border + inset top highlight that fade in, plus a diagonal light
+           sweep, alongside a slight scale-up. No backdrop-filter blur here
+           since that would blur the photo itself, not just tint a button. */
+        .team-photo-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .team-photo-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transform: translateX(-220%);
+            transition: transform 3s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .team-card:hover .team-photo-frame {
+            transform: scale(1.005);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 20px 40px rgba(4, 9, 20, 0.5);
+        }
+
+        .team-card:hover .team-photo-frame::after {
+            transform: translateX(220%);
+        }
+
+        .team-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            transition: color 0.3s ease;
+        }
+
+        .team-card:hover .team-name {
+            color: var(--orange);
+        }
+
+        .team-role {
+            font-size: 18px;
+            line-height: 1.5;
+            color: var(--cyan-light);
+            opacity: 0.8;
+        }
+
+        /* Draggable/clickable scrub bar, à la Apple product-page card carousels */
+        .team-scrubber {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            height: 4px;
+            margin: 40px auto 0;
+            background: rgba(193, 235, 239, 0.15);
+            border-radius: 999px;
+            cursor: pointer;
+            touch-action: none;
+        }
+
+        .team-scrubber-thumb {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--orange);
+            border-radius: 999px;
+        }
+
+        /* 3-per-row is too cramped on narrow screens — show a bit over one
+           card at a time instead, still scrollable/scrubbable the same way */
+        @media (max-width: 540px) {
+            .team-card {
+                flex-basis: 78%;
+            }
+        }
+
+        /* --- Our Partners --- */
+        .partners-section {
+            padding: 160px 8%;
+            text-align: center;
+            position: relative;
+            border-top: 1px solid rgba(193, 235, 239, 0.1);
+        }
+
+        .partners-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 56px;
+            margin-top: 50px;
+        }
+
+        .partner-logo {
+            height: 60px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader: cycles taglines + a circular progress ring while the page settles -->
+    <div id="preloader">
+        <div class="loader-ring">
+            <svg viewBox="0 0 84 84">
+                <circle class="track" cx="42" cy="42" r="40"></circle>
+                <circle class="progress" cx="42" cy="42" r="40"></circle>
+            </svg>
+            <span class="loader-pct" id="loaderPct">0%</span>
+        </div>
+        <div class="loader-text" id="loaderText"></div>
+    </div>
+
+    <header id="siteHeader">
+        <a href="prototype.html#home" class="logo">
+            <img src="Logo/logo_white.png" alt="Logo" class="logo-graphic">
+        </a>
+        <nav id="siteNav">
+            <ul>
+                <li><a href="Our-Technology.html">Our Technology</a></li>
+                <li><a href="about.html">About us</a></li>
+                <li><a href="newsroom.html">Newsroom</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <a href="mailto:hello@xploraventures.com" class="nav-cta">Contact</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- About / CTA (moved from the main page) -->
+    <section class="cta-section" id="about">
+        <span class="eyebrow fade-up">About us</span>
+        <h2 class="mission-statement"><span class="fx-scanner">Xplora</span> is built on rigorous research and deep scientific expertise.</h2>
+        <p class="fade-up" style="--reveal-delay:0.15s">Our team brings together academic discipline and entrepreneurial drive to turn advanced materials science into real-world energy solutions.</p>
+
+    </section>
+
+    <!-- Our team -->
+    <section class="team-section" id="team">
+        <span class="eyebrow fade-up">Our team</span>
+        <h2 class="fade-up" style="--reveal-delay:0.05s">Bringing science to life.</h2>
+
+        <div class="team-track" id="teamTrack">
+            <div class="team-card fade-up" style="--reveal-delay:0.1s">
+                <div class="team-photo-frame">
+                    <img src="OurTeam/Nan YANG.jpg" alt="Dr. Nan Yang" class="team-photo">
+                </div>
+                <h3 class="team-name">Dr. Nan Yang</h3>
+                <p class="team-role">CEO & Founder</p>
+            </div>
+            <div class="team-card fade-up" style="--reveal-delay:0.15s">
+                <div class="team-photo-frame">
+                    <img src="OurTeam/Niamh Given.webp" alt="Niamh Given" class="team-photo">
+                </div>
+                <h3 class="team-name">Niamh Given</h3>
+                <p class="team-role">Director</p>
+            </div>
+            <div class="team-card fade-up" style="--reveal-delay:0.2s">
+                <div class="team-photo-frame">
+                    <img src="OurTeam/Alex Yip.jpg" alt="Alex Yip" class="team-photo">
+                </div>
+                <h3 class="team-name">Alex Yip</h3>
+                <p class="team-role">Technical Advisor</p>
+            </div>
+        </div>
+
+        <div class="team-scrubber" id="teamScrubber">
+            <div class="team-scrubber-thumb" id="teamScrubberThumb"></div>
+        </div>
+    </section>
+
+    <!-- Our Partners -->
+    <section class="partners-section" id="partners">
+        <span class="eyebrow fade-up">Our Partners</span>
+
+        <div class="partners-row">
+            <img src="Partners/Logos/WNT.png" alt="WNT Ventures" class="partner-logo fade-up" style="--reveal-delay:0.25s">
+            <img src="Partners/Logos/MB.png" alt="Ministry of Business, Innovation & Employment" class="partner-logo fade-up" style="--reveal-delay:0.05s">
+            <img src="Partners/Logos/K1W1.svg" alt="K One W One Ltd" class="partner-logo fade-up" style="--reveal-delay:0.2s">
+            <img src="Partners/Logos/Angle HQ.png" alt="Angle HQ" class="partner-logo fade-up" style="--reveal-delay:0.15s">
+            <img src="Partners/Logos/MotionCapital.png" alt="Motion Capital" class="partner-logo fade-up" style="--reveal-delay:0.1s">
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-left">
+                <div class="footer-statement reveal-line"><span>Energy volatility is rising, electrification is accelerating. The world needs better tools to manage heat.</span></div>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>Follow Us</h4>
+                    <a href="https://www.linkedin.com/company/xploraventures/" target="_blank">LinkedIn</a>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <a href="mailto:hello@xploraventures.com">hello@xploraventures.com</a>
+                    <address>
+                        <p>69 Gracefield Road</p>
+                        <p>Lower Hutt, Wellington</p>
+                    </address>
+                </div>
+                <div>
+                    <h4>Navigate</h4>
+                    <a href="Our-Technology.html">Our Technology</a>
+                    <a href="about.html">About us</a>
+                    <a href="newsroom.html">Newsroom</a>
+                    <a href="careers.html">Careers</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="legal-links">
+                <a href="#">Cookie Policy</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <small>© 2026 Xplora. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <!-- GSAP + ScrollTrigger for parallax; Lenis for smooth scroll -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script defer src="main.js"></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            var track = document.getElementById('teamTrack');
+            var scrubber = document.getElementById('teamScrubber');
+            var thumb = document.getElementById('teamScrubberThumb');
+            if (!track || !scrubber || !thumb) return;
+
+            function updateThumb() {
+                var maxScroll = track.scrollWidth - track.clientWidth;
+                var visibleRatio = Math.min(1, track.clientWidth / track.scrollWidth);
+                var thumbWidthPct = visibleRatio * 100;
+                var maxThumbLeftPct = 100 - thumbWidthPct;
+                var scrolledRatio = maxScroll > 0 ? track.scrollLeft / maxScroll : 0;
+
+                thumb.style.width = thumbWidthPct + '%';
+                thumb.style.left = (scrolledRatio * maxThumbLeftPct) + '%';
+            }
+
+            function scrollToClientX(clientX) {
+                var rect = scrubber.getBoundingClientRect();
+                var ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+                var maxScroll = track.scrollWidth - track.clientWidth;
+                track.scrollLeft = ratio * maxScroll;
+            }
+
+            var dragging = false;
+            scrubber.addEventListener('pointerdown', function (e) {
+                dragging = true;
+                scrubber.setPointerCapture(e.pointerId);
+                scrollToClientX(e.clientX);
+            });
+            scrubber.addEventListener('pointermove', function (e) {
+                if (dragging) scrollToClientX(e.clientX);
+            });
+            scrubber.addEventListener('pointerup', function () { dragging = false; });
+            scrubber.addEventListener('pointercancel', function () { dragging = false; });
+
+            track.addEventListener('scroll', updateThumb);
+            window.addEventListener('resize', updateThumb);
+            updateThumb();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> XPLORA - Our Technology</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/tasa-explorer@5.0.8/index.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Page-specific overrides only — shared rules live in styles.css */
+
+        /* This page has no light hero photo behind the header (unlike the
+           home page, where the default dark-navy nav text is tuned for
+           contrast against that image) — so nav text needs to be light
+           from the start, not just after .scrolled kicks in. */
+        nav ul li a {
+            color: #ffffff;
+            opacity: 1;
+        }
+
+        /* Two-column layout: text list on the left, 1:1 animation stage on
+           the right — hovering a list row crossfades in the matching
+           panel on the right (JS keys off [data-panel], unchanged from
+           the previous overlay-card layout). */
+        .tech-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin: 60px 0 0;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* .content-card is normally a standalone glass panel (see
+           styles.css) — here it's repurposed as a plain list row, so its
+           card chrome (background/blur/border/shadow/lift) is stripped
+           back out and replaced with a simple hover indicator instead. */
+        .tech-list .content-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            background: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            padding: 26px 0 26px 22px;
+            border-radius: 0;
+            border: none;
+            border-top: 1px solid rgba(193, 235, 239, 0.15);
+            box-shadow: none;
+            cursor: pointer;
+        }
+
+        .tech-list .content-card:last-child {
+            border-bottom: 1px solid rgba(193, 235, 239, 0.15);
+        }
+
+        .tech-list .content-card:hover {
+            transform: none;
+            background: none;
+            border-color: rgba(193, 235, 239, 0.15);
+        }
+
+        .tech-list .content-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 3px;
+            height: 0;
+            background: var(--orange);
+            transform: translateY(-50%);
+            transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tech-list .content-card:hover::before {
+            height: 56%;
+        }
+
+        .tech-list .stat-number {
+            transition: color 0.3s ease;
+        }
+
+        .tech-list .content-card:hover .stat-number {
+            color: var(--orange);
+        }
+
+        .tech-list .content-card:hover .unit {
+            color: #ffffff;
+            font-size: 0.5em;
+        }
+
+        .tech-list .content-card p {
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .tech-list .content-card:hover p {
+            opacity: 1;
+        }
+
+        /* 1:1 animation stage — one overview placeholder shown by default,
+           crossfaded for the matching row's placeholder on hover. */
+        .tech-stage {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .tech-stage .graphic-slot {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            aspect-ratio: auto;
+            opacity: 0;
+            transform: scale(1.05);
+            filter: blur(8px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+            pointer-events: none;
+        }
+
+        .tech-stage .graphic-slot.is-active {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0);
+        }
+
+        /* Once a panel's real rendered frames are wired up (see the script
+           before </body>), its placeholder icon/label are swapped out for
+           a canvas that plays the sequence on loop while hovered. */
+        .tech-stage .graphic-slot.has-frames {
+            padding: 0;
+            background: none;
+            border: none;
+        }
+
+        .tech-stage .graphic-slot.has-frames::before {
+            display: none;
+        }
+
+        .stage-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (max-width: 992px) {
+            .tech-split {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        /* Tall runway so the banner has scroll distance to burn through
+           all its frames before the page is allowed to continue past it —
+           the banner itself pins via `position: sticky` inside this. */
+        .tech-banner-pin {
+            position: relative;
+            height: 300vh;
+        }
+
+        .tech-banner {
+            position: sticky;
+            top: 15vh;
+            width: 100%;
+            margin: 0px auto 0;
+            overflow: hidden;
+        }
+
+        .tech-banner .graphic-slot {
+            position: relative;
+            z-index: 2;
+            aspect-ratio: 16 / 9;
+        }
+
+        /* Sits behind the animation layer (z-index below the graphic-slot
+           canvas) so it shows through the transparent parts of each
+           frame. No opacity/transition here — scrubBanner() (see script
+           before </body>) sets its transform directly on every scroll
+           tick, sliding it in horizontally in lockstep with the scroll
+           position once frame 90 is passed (.tech-banner's overflow:
+           hidden clips it while it's parked off to the side). */
+        .tech-banner .tech-statement {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 10%;
+            text-align: left;
+            pointer-events: none;
+        }
+
+        /* Overrides the shared .mission-statement sizing (tuned for
+           full-bleed hero headlines) down to this section's smaller
+           supporting-statement scale. */
+        .tech-statement .mission-statement {
+            margin: 0 auto;
+            max-width: 1960px;
+            font-size: clamp(45px, 2.5vw, 55px);
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: -0.5px;
+        }
+
+        .tech-banner .graphic-slot.has-frames {
+            padding: 0;
+            background: none;
+            border: none;
+        }
+
+        .tech-banner .graphic-slot.has-frames::before {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader: cycles taglines + a circular progress ring while the page settles -->
+    <div id="preloader">
+        <div class="loader-ring">
+            <svg viewBox="0 0 84 84">
+                <circle class="track" cx="42" cy="42" r="40"></circle>
+                <circle class="progress" cx="42" cy="42" r="40"></circle>
+            </svg>
+            <span class="loader-pct" id="loaderPct">0%</span>
+        </div>
+        <div class="loader-text" id="loaderText"></div>
+    </div>
+
+    <header id="siteHeader">
+        <a href="prototype.html#home" class="logo">
+            <img src="Logo/logo_white.png" alt="Logo" class="logo-graphic">
+        </a>
+        <nav id="siteNav">
+            <ul>
+                <li><a href="Our-Technology.html">Our Technology</a></li>
+                <li><a href="about.html">About us</a></li>
+                <li><a href="newsroom.html">Newsroom</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <a href="mailto:hello@xploraventures.com" class="nav-cta">Contact</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Statement (moved from the main page) -->
+    <section class="section-content" id="how-it-works">
+        <span class="eyebrow fade-up">How it works</span>
+        <h2 class="section-title">
+            <span class="reveal-line" style="--reveal-delay:0.05s"><span>Our thermal energy storage leverages</span></span>
+            <span class="reveal-line" style="--reveal-delay:0.15s"><span>reversible thermochemical reactions to store energy sustainably and efficiently.</span></span>
+        </h2>
+
+        <div class="tech-split fade-up" style="--reveal-delay:0.05s">
+            <div class="tech-list">
+                <div class="content-card" data-panel="charging">
+                    <div class="stat-number">01<span class="unit">Charging</span></div>
+                    <p>Absorb energy & release humidity.</p>
+                </div>
+                <div class="content-card" data-panel="store">
+                    <div class="stat-number">02<span class="unit">Store</span></div>
+                    <p>Store for indefinite time with minimum loss.</p>
+                </div>
+                <div class="content-card" data-panel="release">
+                    <div class="stat-number">03<span class="unit">Release</span></div>
+                    <p>Absorb humidity & release heat.</p>
+                </div>
+            </div>
+
+            <div class="tech-stage">
+                <div class="graphic-slot is-active" data-panel="overview" data-graphic="00" data-frames="Ourtech/00_overview" data-frame-count="126">
+                    <div class="slot-icon">⬡</div>
+                    <div class="slot-label">Graphic placeholder — full technology overview</div>
+                </div>
+                <div class="graphic-slot" data-panel="charging" data-graphic="01" data-frames="Ourtech/01_charging" data-frame-count="126">
+                    <div class="slot-icon">01</div>
+                    <div class="slot-label">Graphic placeholder — charging visual</div>
+                </div>
+                <div class="graphic-slot" data-panel="store" data-graphic="02" data-frames="Ourtech/02_store" data-frame-count="51">
+                    <div class="slot-icon">02</div>
+                    <div class="slot-label">Graphic placeholder — store visual</div>
+                </div>
+                <div class="graphic-slot" data-panel="release" data-graphic="03" data-frames="Ourtech/03_release" data-frame-count="126">
+                    <div class="slot-icon">03</div>
+                    <div class="slot-label">Graphic placeholder — release visual</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-banner-pin">
+            <div class="tech-banner">
+                <div class="tech-statement">
+                    <h2 class="mission-statement"> On-demand, portable & scalable.</h2>
+                </div>
+                <div class="graphic-slot" data-graphic="04" data-frames="Ourtech/05_Overview" data-frame-count="125">
+                    <div class="slot-icon">▣</div>
+                    <div class="slot-label">Graphic placeholder — full-width visual</div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-left">
+                <div class="footer-statement reveal-line"><span>Energy volatility is rising, electrification is accelerating. The world needs better tools to manage heat.</span></div>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>Follow Us</h4>
+                    <a href="https://www.linkedin.com/company/xploraventures/" target="_blank">LinkedIn</a>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <a href="mailto:hello@xploraventures.com">hello@xploraventures.com</a>
+                    <address>
+                        <p>69 Gracefield Road</p>
+                        <p>Lower Hutt, Wellington</p>
+                    </address>
+                </div>
+                <div>
+                    <h4>Navigate</h4>
+                    <a href="Our-Technology.html">Our Technology</a>
+                    <a href="about.html">About us</a>
+                    <a href="newsroom.html">Newsroom</a>
+                    <a href="careers.html">Careers</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="legal-links">
+                <a href="#">Cookie Policy</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <small>© 2026 Xplora. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <!-- GSAP + ScrollTrigger for parallax; Lenis for smooth scroll -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script defer src="main.js"></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            var stage = document.querySelector('.tech-stage');
+            if (!stage) return;
+
+            var panels = {};
+            stage.querySelectorAll('.graphic-slot').forEach(function (p) {
+                panels[p.dataset.panel] = p;
+            });
+            var overview = panels.overview;
+
+            function pad4(n) {
+                n = String(n);
+                while (n.length < 4) n = '0' + n;
+                return n;
+            }
+
+            /* A panel with a data-frames folder gets its placeholder
+               icon/label swapped for a canvas that plays the rendered
+               sequence on loop while its panel is active (hovered),
+               resetting to frame 0 once it's not. Panels without real
+               frames yet (charging/store) are untouched. */
+            function setupFramePlayer(panel) {
+                var folder = panel.dataset.frames;
+                if (!folder) return null;
+                var frameCount = parseInt(panel.dataset.frameCount, 10);
+
+                panel.classList.add('has-frames');
+                panel.innerHTML = '';
+                var canvas = document.createElement('canvas');
+                canvas.className = 'stage-canvas';
+                panel.appendChild(canvas);
+                var ctx = canvas.getContext('2d');
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+
+                var frames = new Array(frameCount);
+                var loaded = new Array(frameCount);
+                for (var i = 0; i < frameCount; i++) {
+                    (function (i) {
+                        var img = new Image();
+                        img.onload = function () {
+                            loaded[i] = true;
+                            if (i === 0) draw(0);
+                        };
+                        img.src = folder + '/' + pad4(i) + '.webp';
+                        frames[i] = img;
+                    })(i);
+                }
+
+                function draw(index) {
+                    var img = frames[index];
+                    if (!img || !loaded[index] || !canvas.width) return;
+                    var cw = canvas.width, ch = canvas.height;
+                    var scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+                    var dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+                    ctx.clearRect(0, 0, cw, ch);
+                    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+                }
+
+                function resize() {
+                    var dpr = window.devicePixelRatio || 1;
+                    canvas.width = panel.clientWidth * dpr;
+                    canvas.height = panel.clientHeight * dpr;
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    draw(currentIndex);
+                }
+                window.addEventListener('resize', resize);
+                resize();
+
+                var rafId = null;
+                var currentIndex = 0;
+                var lastTime = 0;
+                var fps = 30;
+
+                function loop(time) {
+                    if (!lastTime) lastTime = time;
+                    if (time - lastTime >= 1000 / fps) {
+                        draw(currentIndex);
+                        currentIndex = (currentIndex + 1) % frameCount;
+                        lastTime = time;
+                    }
+                    rafId = requestAnimationFrame(loop);
+                }
+
+                return {
+                    play: function () {
+                        if (rafId) return;
+                        lastTime = 0;
+                        rafId = requestAnimationFrame(loop);
+                    },
+                    stop: function () {
+                        if (rafId) cancelAnimationFrame(rafId);
+                        rafId = null;
+                        currentIndex = 0;
+                        draw(0);
+                    }
+                };
+            }
+
+            var players = {};
+            Object.keys(panels).forEach(function (key) {
+                var player = setupFramePlayer(panels[key]);
+                if (player) players[key] = player;
+            });
+
+            /* Overview is the resting state (visible whenever no stage is
+               hovered), so its loop runs continuously by default and just
+               pauses while a specific stage takes over. */
+            if (players.overview) players.overview.play();
+
+            document.querySelectorAll('.content-card[data-panel]').forEach(function (card) {
+                var panel = panels[card.dataset.panel];
+                if (!panel) return;
+
+                card.addEventListener('mouseenter', function () {
+                    overview.classList.remove('is-active');
+                    panel.classList.add('is-active');
+                    if (players.overview) players.overview.stop();
+                    if (players[card.dataset.panel]) players[card.dataset.panel].play();
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    panel.classList.remove('is-active');
+                    overview.classList.add('is-active');
+                    if (players[card.dataset.panel]) players[card.dataset.panel].stop();
+                    if (players.overview) players.overview.play();
+                });
+            });
+        });
+    </script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            function pad4(n) {
+                n = String(n);
+                while (n.length < 4) n = '0' + n;
+                return n;
+            }
+
+            function clamp01(v) {
+                return Math.min(Math.max(v, 0), 1);
+            }
+
+            /* 0 at the top of a tall wrapper's scroll runway, 1 at the
+               bottom — used for pinned (position: sticky) sections, where
+               the page holds still while this fraction goes 0 → 1. */
+            function pinProgress(wrapperRect) {
+                var scrollable = wrapperRect.height - window.innerHeight;
+                return scrollable > 0 ? clamp01(-wrapperRect.top / scrollable) : 0;
+            }
+
+            /* The full-width banner pins in place (see .tech-banner-pin/
+               .tech-banner in <style>) and scrubs through all frames in
+               the folder as the page holds there, only releasing once
+               the sequence is done. The tech-statement layered behind it
+               (lower z-index, shows through the frames' transparent
+               areas) slides up into place, driven directly by scroll
+               position, once revealFrame is passed. */
+            var pinWrap = document.querySelector('.tech-banner-pin');
+            var panel = document.querySelector('.tech-banner .graphic-slot[data-frames]');
+            var statement = document.querySelector('.tech-banner .tech-statement');
+            var revealFrame = 60; // frame number (1-indexed, matching the file names) after which the statement starts revealing
+            if (panel && pinWrap) {
+                var folder = panel.dataset.frames;
+                var frameCount = parseInt(panel.dataset.frameCount, 10);
+
+                panel.classList.add('has-frames');
+                panel.innerHTML = '';
+                var canvas = document.createElement('canvas');
+                canvas.className = 'stage-canvas';
+                panel.appendChild(canvas);
+                var ctx = canvas.getContext('2d');
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+
+                var frames = new Array(frameCount);
+                var loaded = new Array(frameCount);
+                var currentDrawn = -1;
+
+                for (var i = 0; i < frameCount; i++) {
+                    (function (i) {
+                        var img = new Image();
+                        img.onload = function () {
+                            loaded[i] = true;
+                            if (i === 0) draw(0);
+                        };
+                        img.src = folder + '/' + pad4(i + 1) + '.webp';
+                        frames[i] = img;
+                    })(i);
+                }
+
+                var draw = function (index) {
+                    if (index === currentDrawn) return;
+                    var img = frames[index];
+                    if (!img || !loaded[index] || !canvas.width) return;
+                    currentDrawn = index;
+                    var cw = canvas.width, ch = canvas.height;
+                    var scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+                    var dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+                    ctx.clearRect(0, 0, cw, ch);
+                    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+                };
+
+                var scrubBanner = function () {
+                    var progress = pinProgress(pinWrap.getBoundingClientRect());
+                    var index = Math.round(progress * (frameCount - 1));
+                    while (index > 0 && !loaded[index]) index--;
+                    draw(index);
+
+                    if (statement) {
+                        var revealSpan = Math.max(frameCount - revealFrame, 1);
+                        var revealProgress = clamp01(((index + 1) - revealFrame) / revealSpan);
+                        var startX = -100; // % translateX before revealFrame (parked off-screen left)
+                        var endX = -12;      // % translateX once the sequence finishes — change this to land somewhere other than its natural flex-start position
+                        statement.style.transform = 'translateX(' + (startX + revealProgress * (endX - startX)) + '%)';
+                    }
+                };
+
+                var resizeCanvas = function () {
+                    var dpr = window.devicePixelRatio || 1;
+                    canvas.width = panel.clientWidth * dpr;
+                    canvas.height = panel.clientHeight * dpr;
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    currentDrawn = -1;
+                    scrubBanner();
+                };
+
+                window.addEventListener('scroll', scrubBanner, { passive: true });
+                window.addEventListener('resize', resizeCanvas);
+                resizeCanvas();
+            }
+
+        });
+    </script>
+</body>
+</html>

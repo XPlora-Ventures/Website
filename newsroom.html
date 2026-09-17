@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsroom — Xplora</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/tasa-explorer@5.0.8/index.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Page-specific overrides only — shared rules live in styles.css */
+
+        /* This page has no light hero photo behind the header (unlike the
+           home page, where the default dark-navy nav text is tuned for
+           contrast against that image) — so nav text needs to be light
+           from the start, not just after .scrolled kicks in. */
+        nav ul li a {
+            color: #ffffff;
+            opacity: 1;
+        }
+
+        /* --- News list --- */
+        .news-section {
+            padding: 100px 8% 140px;
+            position: relative;
+            border-top: 1px solid rgba(193, 235, 239, 0.1);
+        }
+
+        .news-section h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            max-width: 700px;
+            line-height: 1.2;
+            margin-bottom: 50px;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .news-card {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .news-card .graphic-slot {
+            aspect-ratio: 16 / 9;
+            margin-bottom: 20px;
+        }
+
+        .news-photo {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .news-heading {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .news-card:hover .news-heading {
+            color: var(--cyan);
+        }
+
+        .news-author {
+            font-size: 14px;
+            color: var(--cyan-light);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 900px) {
+            .news-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .news-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader: cycles taglines + a circular progress ring while the page settles -->
+    <div id="preloader">
+        <div class="loader-ring">
+            <svg viewBox="0 0 84 84">
+                <circle class="track" cx="42" cy="42" r="40"></circle>
+                <circle class="progress" cx="42" cy="42" r="40"></circle>
+            </svg>
+            <span class="loader-pct" id="loaderPct">0%</span>
+        </div>
+        <div class="loader-text" id="loaderText"></div>
+    </div>
+
+    <header id="siteHeader">
+        <a href="prototype.html#home" class="logo">
+            <img src="Logo/logo_white.png" alt="Logo" class="logo-graphic">
+        </a>
+        <nav id="siteNav">
+            <ul>
+                <li><a href="Our-Technology.html">Our Technology</a></li>
+                <li><a href="about.html">About us</a></li>
+                <li><a href="newsroom.html">Newsroom</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <a href="mailto:hello@xploraventures.com" class="nav-cta">Contact</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Newsroom hero -->
+    <section class="section-content solution-section" id="newsroom">
+        <span class="eyebrow fade-up">Newsroom</span>
+        <h2 class="mission-statement" aria-label="Updates, milestones, and the latest from Xplora.">
+            <span class="typewriter" aria-hidden="true">Updates, milestones, and the latest from xplora.</span><span class="caret" aria-hidden="true"></span>
+        </h2>
+    </section>
+
+    <!-- News list -->
+    <section class="news-section" id="news">
+        <span class="eyebrow fade-up">Latest</span>
+        <h2 class="fade-up" style="--reveal-delay:0.05s">In the press.</h2>
+
+        <div class="news-grid">
+            <a href="https://www.linkedin.com/posts/creative-hq_have-you-noticed-the-orange-posters-around-activity-7483637464016814082-T4Uv/" target="_blank" class="news-card fade-up" style="--reveal-delay:0.1s">
+                <img src="newsroom/01_creativeHQ.jpg" alt="Creative HQ Wellington poster campaign featuring Xplora" class="news-photo">
+                <h3 class="news-heading">Spotlighting some of the incredible tech companies and founders who call this city home</h3>
+                <p class="news-author">Creative HQ</p>
+            </a>
+            <a href="https://www.wellingtonnz.com/business/hear-from-local-business-superstars/heat-without-boundaries" target="_blank" class="news-card fade-up" style="--reveal-delay:0.15s">
+                <img src="newsroom/02_wellingtonNZ.avif" alt="WellingtonNZ feature on Xplora Ventures" class="news-photo">
+                <h3 class="news-heading">Xplora Ventures innovates seasonal heat storage</h3>
+                <p class="news-author">WellingtonNZ</p>
+            </a>
+            <a href="https://wntventures.co.nz/news/moving-heat-beyond-boundaries-wnt-backs-xplora/" target="_blank" class="news-card fade-up" style="--reveal-delay:0.2s">
+                <img src="newsroom/03_wnt.webp" alt="WNT Ventures announcement backing Xplora" class="news-photo">
+                <h3 class="news-heading">Moving Heat Beyond Boundaries: WNT Backs Xplora's Thermal-Storage Breakthrough</h3>
+                <p class="news-author">WNT Ventures</p>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-left">
+                <div class="footer-statement reveal-line"><span>Energy volatility is rising, electrification is accelerating. The world needs better tools to manage heat.</span></div>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>Follow Us</h4>
+                    <a href="https://www.linkedin.com/company/xploraventures/" target="_blank">LinkedIn</a>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <a href="mailto:hello@xploraventures.com">hello@xploraventures.com</a>
+                    <address>
+                        <p>69 Gracefield Road</p>
+                        <p>Lower Hutt, Wellington</p>
+                    </address>
+                </div>
+                <div>
+                    <h4>Navigate</h4>
+                    <a href="Our-Technology.html">Our Technology</a>
+                    <a href="about.html">About us</a>
+                    <a href="newsroom.html">Newsroom</a>
+                    <a href="careers.html">Careers</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="legal-links">
+                <a href="#">Cookie Policy</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <small>© 2026 Xplora. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <!-- GSAP + ScrollTrigger for parallax; Lenis for smooth scroll -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script defer src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xplora — Moving Heat Beyond Boundaries</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/tasa-explorer@5.0.8/index.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Page-specific overrides only — shared rules live in styles.css */
+
+
+        .wave-overlay {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 40; /* below header's z-index:100 so nav stays usable while this is visible */
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        /* Once a .graphic-slot's real rendered frames are wired up (see
+           the script before </body>), its placeholder icon/label are
+           swapped out for a canvas that plays the sequence on loop while
+           scrolled into view. */
+        .graphic-slot.has-frames {
+            padding: 0;
+            background: none;
+            border: none;
+        }
+
+        .graphic-slot.has-frames::before {
+            display: none;
+        }
+
+        .stage-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader: cycles taglines + a circular progress ring while the page settles -->
+    <div id="preloader">
+        <div class="loader-ring">
+            <svg viewBox="0 0 84 84">
+                <circle class="track" cx="42" cy="42" r="40"></circle>
+                <circle class="progress" cx="42" cy="42" r="40"></circle>
+            </svg>
+            <span class="loader-pct" id="loaderPct">0%</span>
+        </div>
+        <div class="loader-text" id="loaderText"></div>
+    </div>
+
+    <header id="siteHeader">
+        <a href="#home" class="logo">
+            <img src="Logo/logo_white.png" alt="Logo" class="logo-graphic">
+        </a>
+        <nav id="siteNav">
+            <ul>
+                <li><a href="Our-Technology.html">Our Technology</a></li>
+                <li><a href="about.html">About us</a></li>
+                <li><a href="newsroom.html">Newsroom</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <a href="mailto:hello@xploraventures.com" class="nav-cta">Contact</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Landing Hero -->
+    <section class="hero" id="home">
+        <div class="hero-blob one" data-parallax="0.15"></div>
+        <div class="hero-blob two" data-parallax="-0.1"></div>
+        <div class="hero-content">
+            <p class="hero-tagline">xplora</p>
+            <div class="hero-slogan">
+                <img src="Slogan/Slogan_v1.png" alt="Move Heat Beyond Boundaries">
+            </div>
+            <div class="scroll-indicator"><span class="dot"></span> Scroll to explore</div>
+        </div>
+    </section>
+
+    <!-- Heat wave overlay: 250-frame animation, faded in/out and scrubbed
+         by scroll position as the page crosses from the hero into "Our
+         mission" — see .wave-overlay in <style> and the script before
+         </body> -->
+    <canvas id="waveCanvas" class="wave-overlay"></canvas>
+
+    <!-- Our mission (page 1 of 4: text-only intro) -->
+    <div class="mission-fade-wrap">
+        <div class="mission-fade-in" aria-hidden="true"></div>
+        <div class="mission-fade-out" aria-hidden="true"></div>
+        <section class="section-content mission-section" id="mission">
+            <span class="eyebrow fade-up">Our mission</span>
+            <h2 class="mission-statement" aria-label="We exist to make energy storage revolutionary and impactful.">
+                <span class="typewriter" aria-hidden="true">We exist to make energy storage revolutionary and impactful.</span><span class="caret" aria-hidden="true"></span>
+            </h2>
+        </section>
+    </div>
+
+    <!-- 01 -->
+    <section class="feature-section" id="feature-01">
+        <div class="feature-stack">
+            <div class="feature-text">
+                <span class="eyebrow fade-up">Our mission</span>
+                <span class="feature-num fade-up">01</span>
+                <h3 class="feature-heading fade-up" style="--reveal-delay:0.15s">Break barriers in heat storage.</h3>
+                <p class="feature-line fade-up" style="--reveal-delay:0.2s">Store energy effectively across time and place.</p>
+            </div>
+            <div class="feature-visual fade-up" style="--reveal-delay:0.1s">
+                <div class="graphic-slot" data-graphic="01" data-frames="Homepage/01_barrier" data-frame-count="126">
+                    <div class="slot-icon">01</div>
+                    <div class="slot-label">Graphic placeholder — thermal storage animation (1:1)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="feature-section" id="feature-02">
+        <div class="feature-stack">
+            <div class="feature-text">
+                <span class="eyebrow fade-up">Our mission</span>
+                <span class="feature-num fade-up">02</span>
+                <h3 class="feature-heading fade-up" style="--reveal-delay:0.15s">Balance Seasonal Energy Needs.</h3>
+                <p class="feature-line fade-up" style="--reveal-delay:0.2s">Enable consistent energy supply throughout the year.</p>
+            </div>
+            <div class="feature-visual fade-up" style="--reveal-delay:0.1s">
+                <div class="graphic-slot" data-graphic="02" data-frames="Homepage/02_seasonal" data-frame-count="51">
+                    <div class="slot-icon">02</div>
+                    <div class="slot-label">Graphic placeholder — heat exchanger animation (1:1)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="feature-section" id="feature-03">
+        <div class="feature-stack">
+            <div class="feature-text">
+                <span class="eyebrow fade-up">Our mission</span>
+                <span class="feature-num fade-up">03</span>
+                <h3 class="feature-heading fade-up" style="--reveal-delay:0.15s">Decarbonise Heating and Cooling.</h3>
+                <p class="feature-line fade-up" style="--reveal-delay:0.2s">Transform the heating/cooling industry to achieve net-zero emissions.</p>
+            </div>
+            <div class="feature-visual fade-up" style="--reveal-delay:0.1s">
+                <div class="graphic-slot" data-graphic="03" data-frames="Homepage/03_cooling_b" data-frame-count="44">
+                    <div class="slot-icon">03</div>
+                    <div class="slot-label">Graphic placeholder — system integration animation (1:1)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Technology (teaser linking to the dedicated How It Works page) -->
+    <section class="section-content solution-section" id="Our-Technology">
+        <span class="eyebrow fade-up">Our Technology</span>
+        <h2 class="mission-statement" aria-label="Release heat, wherever, whenever.">
+            <span class="typewriter" aria-hidden="true">Release heat, wherever, whenever.</span><span class="caret" aria-hidden="true"></span>
+        </h2>
+        <div class="hero-cta fade-up" style="--reveal-delay:0.2s">
+            <a href="Our-Technology.html" class="btn">Explore how it works</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-left">
+                <div class="footer-statement reveal-line"><span>Energy volatility is rising, electrification is accelerating. The world needs better tools to manage heat.</span></div>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>Follow Us</h4>
+                    <a href="https://www.linkedin.com/company/xploraventures/" target="_blank">LinkedIn</a>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <a href="mailto:hello@xploraventures.com">hello@xploraventures.com</a>
+                    <address>
+                        <p>69 Gracefield Road</p>
+                        <p>Lower Hutt, Wellington</p>
+                    </address>
+                </div>
+                <div>
+                    <h4>Navigate</h4>
+                    <a href="Our-Technology.html">Our Technology</a>
+                    <a href="about.html">About us</a>
+                    <a href="newsroom.html">Newsroom</a>
+                    <a href="careers.html">Careers</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="legal-links">
+                <a href="#">Cookie Policy</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <small>© 2026 Xplora. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <!-- GSAP + ScrollTrigger for parallax; Lenis for smooth scroll -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script defer src="main.js"></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            /* Fades in the heat-wave image sequence as scroll position
+               approaches the hero/mission seam, scrubs through its frames
+               while passing over it, then fades back out — a canvas
+               instead of a <video>, since it needs zero user interaction
+               and has none of the autoplay/seek quirks video elements do. */
+            var hero = document.getElementById('home');
+            var canvas = document.getElementById('waveCanvas');
+            if (!hero || !canvas) return;
+            var ctx = canvas.getContext('2d');
+
+            var frameCount = 251;
+            var frames = new Array(frameCount);
+            var loaded = new Array(frameCount);
+            var currentFrame = -1;
+
+            var zoneStart = 0;  // scrollY where the fade-in begins
+            var zoneHeight = 0; // px of scrolling the whole fade-in/scrub/fade-out spans
+            var fadeEdge = 0.25; // fraction of the zone spent fading in, and again fading out
+            var startFraction = 0.15; // fraction of the hero's height already scrolled when the fade-in begins — lower = starts sooner
+
+            function pad4(n) {
+                n = String(n);
+                while (n.length < 4) n = '0' + n;
+                return n;
+            }
+
+            function drawFrame(index) {
+                if (index === currentFrame) return;
+                var img = frames[index];
+                if (!img || !loaded[index]) return;
+                currentFrame = index;
+                var cw = canvas.width, ch = canvas.height;
+                var scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+                var dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+                ctx.clearRect(0, 0, cw, ch);
+                ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+            }
+
+            function computeZone() {
+                zoneHeight = window.innerHeight;
+                zoneStart = hero.offsetTop + hero.offsetHeight * startFraction;
+            }
+
+            function resizeCanvas() {
+                var dpr = Math.min(window.devicePixelRatio || 1, 2);
+                canvas.width = window.innerWidth * dpr;
+                canvas.height = window.innerHeight * dpr;
+                currentFrame = -1;
+                scrubWave();
+            }
+
+            function scrubWave() {
+                var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                var progress = zoneHeight > 0 ? (scrollY - zoneStart) / zoneHeight : 0;
+                progress = Math.min(Math.max(progress, 0), 1);
+
+                var opacity;
+                if (progress <= 0 || progress >= 1) opacity = 0;
+                else if (progress < fadeEdge) opacity = progress / fadeEdge;
+                else if (progress > 1 - fadeEdge) opacity = (1 - progress) / fadeEdge;
+                else opacity = 1;
+                canvas.style.opacity = opacity;
+
+                var index = Math.round(progress * (frameCount - 1));
+                while (index > 0 && !loaded[index]) index--;
+                drawFrame(index);
+            }
+
+            for (var i = 0; i < frameCount; i++) {
+                (function (i) {
+                    var img = new Image();
+                    img.onload = function () {
+                        loaded[i] = true;
+                        if (i === 0) drawFrame(0);
+                    };
+                    img.src = 'Wave/' + pad4(i) + '.webp';
+                    frames[i] = img;
+                })(i);
+            }
+
+            window.addEventListener('scroll', scrubWave, { passive: true });
+            window.addEventListener('resize', function () {
+                computeZone();
+                resizeCanvas();
+            });
+            computeZone();
+            resizeCanvas();
+        });
+    </script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            /* Any .graphic-slot with a data-frames folder gets its
+               placeholder icon/label swapped for a canvas that preloads
+               and loops the rendered sequence — playing while it's
+               scrolled into view, pausing (in place, no reset) once it
+               isn't. Generic: feature-01/03 will pick this up too as soon
+               as their own frame folders are wired up the same way. */
+            function pad4(n) {
+                n = String(n);
+                while (n.length < 4) n = '0' + n;
+                return n;
+            }
+
+            function setupFramePlayer(panel) {
+                var folder = panel.dataset.frames;
+                if (!folder) return null;
+                var frameCount = parseInt(panel.dataset.frameCount, 10);
+
+                panel.classList.add('has-frames');
+                panel.innerHTML = '';
+                var canvas = document.createElement('canvas');
+                canvas.className = 'stage-canvas';
+                panel.appendChild(canvas);
+                var ctx = canvas.getContext('2d');
+
+                var frames = new Array(frameCount);
+                var loaded = new Array(frameCount);
+                var currentIndex = 0;
+
+                for (var i = 0; i < frameCount; i++) {
+                    (function (i) {
+                        var img = new Image();
+                        img.onload = function () {
+                            loaded[i] = true;
+                            if (i === 0) draw(0);
+                        };
+                        img.src = folder + '/' + pad4(i) + '.webp';
+                        frames[i] = img;
+                    })(i);
+                }
+
+                function draw(index) {
+                    var img = frames[index];
+                    if (!img || !loaded[index] || !canvas.width) return;
+                    var cw = canvas.width, ch = canvas.height;
+                    var scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+                    var dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+                    ctx.clearRect(0, 0, cw, ch);
+                    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+                }
+
+                function resize() {
+                    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+                    canvas.width = panel.clientWidth * dpr;
+                    canvas.height = panel.clientHeight * dpr;
+                    draw(currentIndex);
+                }
+                window.addEventListener('resize', resize);
+                resize();
+
+                var rafId = null;
+                var lastTime = 0;
+                var fps = 30;
+
+                function loop(time) {
+                    if (!lastTime) lastTime = time;
+                    if (time - lastTime >= 1000 / fps) {
+                        draw(currentIndex);
+                        currentIndex = (currentIndex + 1) % frameCount;
+                        lastTime = time;
+                    }
+                    rafId = requestAnimationFrame(loop);
+                }
+
+                return {
+                    play: function () {
+                        if (rafId) return;
+                        lastTime = 0;
+                        rafId = requestAnimationFrame(loop);
+                    },
+                    stop: function () {
+                        if (rafId) cancelAnimationFrame(rafId);
+                        rafId = null;
+                    }
+                };
+            }
+
+            var players = [];
+            document.querySelectorAll('.graphic-slot[data-frames]').forEach(function (panel) {
+                var player = setupFramePlayer(panel);
+                if (player) players.push({ el: panel, player: player });
+            });
+
+            if (players.length && 'IntersectionObserver' in window) {
+                var featureObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        var match = players.filter(function (p) { return p.el === entry.target; })[0];
+                        if (!match) return;
+                        if (entry.isIntersecting) match.player.play();
+                        else match.player.stop();
+                    });
+                }, { threshold: 0.3 });
+                players.forEach(function (p) { featureObserver.observe(p.el); });
+            }
+        });
+    </script>
+</body>
+</html>
