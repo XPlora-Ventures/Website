@@ -1,5 +1,8 @@
 # Reference-only material, not used by the live site
-newsroom/
+# (newsroom/ itself also holds the images newsroom.html actually uses —
+# only the saved source pages + their asset dumps are excluded, below)
+newsroom/*.html
+newsroom/*_files/
 video/
 Cloud.png*.png
 Energy.html
