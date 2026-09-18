@@ -13,6 +13,18 @@
     <style>
         /* Page-specific overrides only — shared rules live in styles.css */
 
+        /* .section-content is flex column with align-items left at its
+           default (stretch) since Our-Technology.html's #how-it-works
+           reuses it for a full-width grid layout that needs to stretch.
+           #mission here is just a centered statement, so it needs its own
+           centering — without it, on very wide viewports the statement
+           (capped by .mission-statement's max-width) sits flush against
+           the left edge instead of centering in the now much-wider
+           section. */
+        #mission {
+            align-items: center;
+            text-align: center;
+        }
 
         .wave-overlay {
             position: fixed;
