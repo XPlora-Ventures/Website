@@ -1,6 +1,12 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/prototype" }
+    { "source": "/", "destination": "/prototype" },
+    { "source": "/news", "destination": "/newsroom" },
+    { "source": "/technology", "destination": "/Our-Technology" }
+  ],
+  "redirects": [
+    { "source": "/newsroom", "destination": "/news", "permanent": true },
+    { "source": "/Our-Technology", "destination": "/technology", "permanent": true }
   ]
 }
