@@ -27,7 +27,10 @@
         #newsroom {
             background-image: linear-gradient(rgba(2, 6, 11, 0.75), rgba(2, 6, 11, 0.85)), url('newsroom/Background/bk1.png');
             background-size: cover;
-            background-position: center;
+            /* bk1.png's subject sits well right-of-center — plain "center"
+               crops a narrow mobile viewport around the image's true
+               middle, cutting the board out of frame entirely. */
+            background-position: 70% center;
             background-repeat: no-repeat;
         }
 

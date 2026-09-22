@@ -27,7 +27,10 @@
         #careers {
             background-image: linear-gradient(rgba(2, 6, 11, 0.75), rgba(2, 6, 11, 0.85)), url('Career/Background/bg3.png');
             background-size: cover;
-            background-position: center;
+            /* bg3.png's subject sits well right-of-center — plain "center"
+               crops a narrow mobile viewport around the image's true
+               middle, cutting him out of frame entirely. */
+            background-position: 72% center;
             background-repeat: no-repeat;
         }
 
