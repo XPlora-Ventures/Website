@@ -26,7 +26,16 @@
         /* --- About/CTA hero text ---
            Sized up for this page's hero (reusing .mission-statement's scale). */
         .cta-section {
-            padding: 250px 8%;
+            min-height: 100vh;
+            padding: 140px 8% 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background-image: linear-gradient(rgba(2, 6, 11, 0.75), rgba(2, 6, 11, 0.85)), url('about/bg2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         .cta-section h2.mission-statement {
