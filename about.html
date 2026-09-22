@@ -223,6 +223,18 @@
             }
         }
 
+        /* Matches .section-content's own mobile override (styles.css) —
+           without dropping min-height here too, .cta-section stays a full
+           100vh-tall box on mobile, forcing its wide background photo to
+           be cropped/zoomed much harder than on desktop to cover that
+           extreme tall-narrow shape. */
+        @media (max-width: 992px) {
+            .cta-section {
+                padding: 110px 6% 60px;
+                min-height: auto;
+            }
+        }
+
         /* --- Our Partners --- */
         .partners-section {
             padding: 160px 8%;
