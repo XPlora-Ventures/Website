@@ -909,8 +909,8 @@ footer {
         backdrop-filter: blur(16px);
         flex-direction: column;
         align-items: flex-start;
-        justify-content: center;
-        padding: 40px;
+        justify-content: flex-start;
+        padding: 120px 40px 40px;
         transform: translateX(100%);
         transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
         margin-left: 0;
