@@ -104,6 +104,74 @@
         @media (max-width: 600px) {
             .news-grid { grid-template-columns: 1fr; }
         }
+
+        /* --- Subscribe --- */
+        .subscribe-section {
+            padding: 140px 8%;
+            position: relative;
+            border-top: 1px solid rgba(193, 235, 239, 0.1);
+            text-align: center;
+        }
+
+        .subscribe-section h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            max-width: 700px;
+            line-height: 1.2;
+            margin: 0 auto 20px;
+        }
+
+        .subscribe-intro {
+            max-width: 480px;
+            margin: 0 auto 40px;
+            color: var(--cyan-light);
+            opacity: 0.85;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        .subscribe-form {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            max-width: 460px;
+            margin: 0 auto;
+        }
+
+        .subscribe-form input[type="email"] {
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 14px 22px;
+            border-radius: 999px;
+            border: 1px solid rgba(193, 235, 239, 0.25);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .subscribe-form input[type="email"]::placeholder {
+            color: var(--cyan-light);
+            opacity: 0.6;
+        }
+
+        .subscribe-form input[type="email"]:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .subscribe-status {
+            margin-top: 18px;
+            font-size: 14px;
+            color: var(--cyan);
+            min-height: 20px;
+        }
+
+        @media (max-width: 540px) {
+            .subscribe-form {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -169,6 +237,30 @@
                 <p class="news-author">WNT Ventures</p>
             </a>
         </div>
+    </section>
+
+    <!-- Subscribe — posts directly to Mailchimp (audience id ea5d553572,
+         list id 8ae4bc592b). target="_blank" opens Mailchimp's own
+         confirm/thank-you page in a new tab so visitors never leave this
+         page; we can't read that response ourselves (no CORS access to
+         list-manage.com), so the helper text below just sets expectations
+         up front rather than trying to report success/failure. The
+         b_ea5d... hidden field is Mailchimp's required anti-bot check —
+         do not remove it. Manage/export actual subscribers from the
+         Mailchimp dashboard (Audience). -->
+    <section class="subscribe-section" id="subscribe">
+        <span class="eyebrow fade-up">Stay Updated</span>
+        <h2 class="fade-up" style="--reveal-delay:0.05s">Subscribe for our future updates.</h2>
+        <p class="subscribe-intro fade-up" style="--reveal-delay:0.1s">Get the latest news, straight to your inbox.</p>
+
+        <form action="https://xploraventures.us7.list-manage.com/subscribe/post?u=ea5d553572c02e7082416a24c&amp;id=8ae4bc592b&amp;f_id=00c690e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="subscribe-form validate fade-up" style="--reveal-delay:0.15s" target="_blank">
+            <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="Your email address" required>
+            <div style="position: absolute; left: -5000px;" aria-hidden="true">
+                <input type="text" name="b_ea5d553572c02e7082416a24c_8ae4bc592b" tabindex="-1" value="">
+            </div>
+            <button type="submit" class="btn">Subscribe</button>
+        </form>
+        <p class="subscribe-status">You'll get a confirmation email, click it to complete your subscription.</p>
     </section>
 
     <footer>
