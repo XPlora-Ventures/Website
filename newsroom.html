@@ -134,10 +134,11 @@
             display: flex;
             justify-content: center;
             gap: 12px;
-            max-width: 460px;
+            max-width: 560px;
             margin: 0 auto;
         }
 
+        .subscribe-form input[type="text"],
         .subscribe-form input[type="email"] {
             flex: 1 1 auto;
             min-width: 0;
@@ -150,11 +151,13 @@
             font-family: inherit;
         }
 
+        .subscribe-form input[type="text"]::placeholder,
         .subscribe-form input[type="email"]::placeholder {
             color: var(--cyan-light);
             opacity: 0.6;
         }
 
+        .subscribe-form input[type="text"]:focus,
         .subscribe-form input[type="email"]:focus {
             outline: none;
             border-color: var(--orange);
@@ -254,6 +257,7 @@
         <p class="subscribe-intro fade-up" style="--reveal-delay:0.1s">Get the latest news, straight to your inbox.</p>
 
         <form action="https://xploraventures.us7.list-manage.com/subscribe/post?u=ea5d553572c02e7082416a24c&amp;id=8ae4bc592b&amp;f_id=00c690e0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="subscribe-form validate fade-up" style="--reveal-delay:0.15s" target="_blank">
+            <input type="text" name="NAME" id="mce-NAME" placeholder="Your name" required>
             <input type="email" name="EMAIL" id="mce-EMAIL" placeholder="Your email address" required>
             <div style="position: absolute; left: -5000px;" aria-hidden="true">
                 <input type="text" name="b_ea5d553572c02e7082416a24c_8ae4bc592b" tabindex="-1" value="">
