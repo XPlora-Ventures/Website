@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Xplora</title>
+    <meta name="description" content="Get in touch with Xplora Ventures — partnership enquiries, media, careers, or just to say hello. Based in Lower Hutt, Wellington, New Zealand.">
+    <link rel="icon" type="image/png" href="Logo/favicon_light.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" href="Logo/favicon_dark.png" media="(prefers-color-scheme: dark)">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/tasa-explorer@5.0.8/index.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Page-specific overrides only — shared rules live in styles.css */
+
+        /* This page has no light hero photo behind the header (unlike the
+           home page, where the default dark-navy nav text is tuned for
+           contrast against that image) — so nav text needs to be light
+           from the start, not just after .scrolled kicks in. */
+        nav ul li a {
+            color: #ffffff;
+            opacity: 1;
+        }
+
+        /* --- Contact: single centered column, full-bleed background photo --- */
+        #contact {
+            background-image: linear-gradient(rgba(2, 6, 11, 0.75), rgba(2, 6, 11, 0.85)), url('contact/Untitled-3 copy.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .contact-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Overrides the shared .mission-statement sizing (tuned for
+           full-bleed hero headlines) — too large next to a compact form. */
+        .contact-left .mission-statement {
+            margin: 0;
+            font-size: clamp(1.8rem, 3vw, 2.8rem);
+        }
+
+        .contact-form-intro {
+            margin: 20px 0 0;
+            color: var(--cyan-light);
+            opacity: 0.85;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 480px;
+            width: 100%;
+            margin: 30px auto 0;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 14px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(193, 235, 239, 0.25);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .contact-form textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: var(--cyan-light);
+            opacity: 0.6;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--orange);
+        }
+
+        .contact-form button {
+            align-self: center;
+        }
+
+        .contact-status {
+            margin-top: 14px;
+            font-size: 14px;
+            color: var(--cyan);
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader: cycles taglines + a circular progress ring while the page settles -->
+    <div id="preloader">
+        <div class="loader-ring">
+            <svg viewBox="0 0 84 84">
+                <circle class="track" cx="42" cy="42" r="40"></circle>
+                <circle class="progress" cx="42" cy="42" r="40"></circle>
+            </svg>
+            <span class="loader-pct" id="loaderPct">0%</span>
+        </div>
+        <div class="loader-text" id="loaderText"></div>
+    </div>
+
+    <header id="siteHeader">
+        <a href="/#home" class="logo">
+            <img src="Logo/logo_white.png" alt="Logo" class="logo-graphic">
+        </a>
+        <nav id="siteNav">
+            <ul>
+                <li><a href="/technology">Our Technology</a></li>
+                <li><a href="/about">About us</a></li>
+                <li><a href="/news">Newsroom</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <a href="/contact" class="nav-cta">Contact</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Contact: single centered statement + form. Submits to Web3Forms,
+         which relays the message straight to hello@xploraventures.com —
+         no backend of our own needed. -->
+    <section class="section-content" id="contact">
+        <div class="contact-grid">
+            <div class="contact-left">
+                <span class="eyebrow fade-up">Contact</span>
+                <h2 class="mission-statement" aria-label="Let's start a conversation.">
+                    <span class="typewriter" aria-hidden="true">Let's start a conversation.</span><span class="caret" aria-hidden="true"></span>
+                </h2>
+                <p class="contact-form-intro fade-up" style="--reveal-delay:0.1s">Fill the form below and we'll be in touch.</p>
+
+                <form class="contact-form fade-up" style="--reveal-delay:0.15s" id="contactForm">
+                    <input type="hidden" name="access_key" value="b36a1492-fdeb-4d0b-8c46-c5e5cb5f2ddd">
+                    <input type="text" name="name" placeholder="Your name" required>
+                    <input type="email" name="email" placeholder="Your email address" required>
+                    <textarea name="message" placeholder="Your message" required></textarea>
+                    <button type="submit" class="btn">Send message</button>
+                </form>
+                <p class="contact-status" id="contactStatus" aria-live="polite"></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-left">
+                <div class="footer-statement reveal-line"><span>Energy volatility is rising, electrification is accelerating. The world needs better tools to manage heat.</span></div>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <h4>Follow Us</h4>
+                    <a href="https://www.linkedin.com/company/xploraventures/" target="_blank">LinkedIn</a>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <a href="mailto:hello@xploraventures.com">hello@xploraventures.com</a>
+                    <address>
+                        <p>69 Gracefield Road</p>
+                        <p>Lower Hutt, Wellington</p>
+                    </address>
+                </div>
+                <div>
+                    <h4>Navigate</h4>
+                    <a href="/technology">Our Technology</a>
+                    <a href="/about">About us</a>
+                    <a href="/news">Newsroom</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/contact">Contact</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="legal-links">
+                <a href="#">Cookie Policy</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <small>© 2026 Xplora. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <!-- GSAP + ScrollTrigger for parallax; Lenis for smooth scroll -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script defer src="main.js"></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('contactForm');
+            var status = document.getElementById('contactStatus');
+            if (!form) return;
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                status.textContent = 'Sending…';
+
+                fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                    body: JSON.stringify(Object.fromEntries(new FormData(form))),
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if (!data.success) throw new Error(data.message || 'Request failed');
+                        status.textContent = "Thanks — we'll be in touch soon.";
+                        form.reset();
+                    })
+                    .catch(function () {
+                        status.textContent = 'Something went wrong — please email us directly at hello@xploraventures.com.';
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -174,16 +174,63 @@
             transform: translateX(220%);
         }
 
+        /* Brief bio overlay — sits inside .team-photo-frame (so it shares
+           its rounded corners + overflow:hidden), hidden until hover. */
+        .team-bio {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            display: flex;
+            align-items: flex-end;
+            padding: 24px 20px;
+            background: linear-gradient(to top, rgba(2, 6, 11, 0.92) 0%, rgba(2, 6, 11, 0.55) 60%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .team-card:hover .team-bio {
+            opacity: 1;
+        }
+
+        .team-bio p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--cyan-light);
+        }
+
+        .team-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
         .team-name {
             font-size: 24px;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 6px;
             transition: color 0.3s ease;
         }
 
         .team-card:hover .team-name {
             color: var(--orange);
+        }
+
+        .team-linkedin {
+            display: inline-flex;
+            opacity: 0.85;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .team-linkedin:hover {
+            opacity: 1;
+            transform: scale(1.08);
+        }
+
+        .team-linkedin svg {
+            width: 20px;
+            height: 20px;
         }
 
         .team-role {
@@ -284,7 +331,7 @@
             </ul>
         </nav>
         <div class="nav-actions">
-            <a href="mailto:hello@xploraventures.com" class="nav-cta">Contact</a>
+            <a href="/contact" class="nav-cta">Contact</a>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
             </button>
@@ -308,29 +355,63 @@
             <div class="team-card fade-up" style="--reveal-delay:0.1s">
                 <div class="team-photo-frame">
                     <img src="OurTeam/Nan YANG.jpg" alt="Dr. Nan Yang" class="team-photo">
+                    <!-- TODO: replace with Dr. Nan Yang's real bio -->
+                    <div class="team-bio"><p>Founder of Xplora Ventures, combines deep technical knowledge with commercial acumen and investment experience to drive innovation in renewable energy. 
+His passion for creating a sustainable future, paired with his multidisciplinary skills, fuels Xplora Ventures' mission to transform the way we store and utilise energy for a greener future.</p></div>
                 </div>
-                <h3 class="team-name">Dr. Nan Yang</h3>
+                <div class="team-name-row">
+                    <h3 class="team-name">Dr. Nan Yang</h3>
+                    <!-- TODO: replace # with real LinkedIn/profile URL -->
+                    <a href="https://www.linkedin.com/in/nanyang3/" class="team-linkedin" target="_blank" rel="noopener" aria-label="Dr. Nan Yang's LinkedIn profile">
+                        <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#ffffff"/><path fill="var(--bg)" d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.25 2.36 4.25 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+                    </a>
+                </div>
                 <p class="team-role">CEO & Founder</p>
             </div>
             <div class="team-card fade-up" style="--reveal-delay:0.15s">
                 <div class="team-photo-frame">
                     <img src="OurTeam/Niamh Given.webp" alt="Niamh Given" class="team-photo">
+                    <!-- TODO: replace with Niamh Given's real bio -->
+                    <div class="team-bio"><p>Senior Investment Manager at WNT Ventures | Deep Tech & Hardware | Operator turned Investor.</p></div>
                 </div>
-                <h3 class="team-name">Niamh Given</h3>
+                <div class="team-name-row">
+                    <h3 class="team-name">Niamh Given</h3>
+                    <!-- TODO: replace # with real LinkedIn/profile URL -->
+                    <a href="https://www.linkedin.com/in/niamhgiven/" class="team-linkedin" target="_blank" rel="noopener" aria-label="Niamh Given's LinkedIn profile">
+                        <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#ffffff"/><path fill="var(--bg)" d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.25 2.36 4.25 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+                    </a>
+                </div>
                 <p class="team-role">Director</p>
             </div>
             <div class="team-card fade-up" style="--reveal-delay:0.2s">
                 <div class="team-photo-frame">
                     <img src="OurTeam/Alex Yip.jpg" alt="Alex Yip" class="team-photo">
+                    <!-- TODO: replace with Prof. Alex Yip's real bio -->
+                    <div class="team-bio"><p>Principal Investigator of the Laboratory for Energy and Environmental Catalysis at the University of Canterbury. A leading expert in energy and environmental catalysis.
+Alex brings his expertise in prototype development and material characterisation to drive innovation at Xplora Ventures.</p></div>
                 </div>
-                <h3 class="team-name">Prof. Alex Yip</h3>
+                <div class="team-name-row">
+                    <h3 class="team-name">Prof. Alex Yip</h3>
+                    <!-- TODO: replace # with real LinkedIn/profile URL -->
+                    <a href="https://www.linkedin.com/in/alex-yip-33798133/" class="team-linkedin" target="_blank" rel="noopener" aria-label="Prof. Alex Yip's LinkedIn profile">
+                        <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#ffffff"/><path fill="var(--bg)" d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.25 2.36 4.25 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+                    </a>
+                </div>
                 <p class="team-role">Technical Advisor</p>
             </div>
             <div class="team-card fade-up" style="--reveal-delay:0.25s">
                 <div class="team-photo-frame">
                     <img src="OurTeam/Daniela McKenzie.jpg" alt="Daniela McKenzie" class="team-photo">
+                    <!-- TODO: replace with Daniela McKenzie's real bio -->
+                    <div class="team-bio"><p>Energy, Innovation, Strategy, Global Partnerships, Investing.</p></div>
                 </div>
-                <h3 class="team-name">Daniela McKenzie</h3>
+                <div class="team-name-row">
+                    <h3 class="team-name">Daniela McKenzie</h3>
+                    <!-- TODO: replace # with real LinkedIn/profile URL -->
+                    <a href="https://www.linkedin.com/in/daniela-mckenzie-92a01b26/" class="team-linkedin" target="_blank" rel="noopener" aria-label="Daniela McKenzie's LinkedIn profile">
+                        <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#ffffff"/><path fill="var(--bg)" d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.25 2.36 4.25 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+                    </a>
+                </div>
                 <p class="team-role">Strategy Advisor</p>
             </div>
         </div>
@@ -377,6 +458,7 @@
                     <a href="/about">About us</a>
                     <a href="/news">Newsroom</a>
                     <a href="/careers">Careers</a>
+                    <a href="/contact">Contact</a>
                 </div>
             </div>
         </div>
