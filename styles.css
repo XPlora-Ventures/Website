@@ -945,6 +945,11 @@ footer {
     .accordion-panel-inner { padding-left: 0; }
 
     .footer-top { flex-direction: column; gap: 40px; }
+
+    .footer-statement {
+        font-size: 1.05rem;
+        margin-bottom: 0;
+    }
 }
 
 @media (max-width: 650px) {
