@@ -163,68 +163,6 @@
             }
         }
 
-        /* Tall runway so the banner has scroll distance to burn through
-           all its frames before the page is allowed to continue past it —
-           the banner itself pins via `position: sticky` inside this. */
-        .tech-banner-pin {
-            position: relative;
-            height: 300vh;
-        }
-
-        .tech-banner {
-            position: sticky;
-            top: 15vh;
-            width: 100%;
-            margin: 0px auto 0;
-            overflow: hidden;
-        }
-
-        .tech-banner .graphic-slot {
-            position: relative;
-            z-index: 2;
-            aspect-ratio: 16 / 9;
-        }
-
-        /* Sits behind the animation layer (z-index below the graphic-slot
-           canvas) so it shows through the transparent parts of each
-           frame. No opacity/transition here — scrubBanner() (see script
-           before </body>) sets its transform directly on every scroll
-           tick, sliding it in horizontally in lockstep with the scroll
-           position once frame 90 is passed (.tech-banner's overflow:
-           hidden clips it while it's parked off to the side). */
-        .tech-banner .tech-statement {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0 10%;
-            text-align: left;
-            pointer-events: none;
-        }
-
-        /* Overrides the shared .mission-statement sizing (tuned for
-           full-bleed hero headlines) down to this section's smaller
-           supporting-statement scale. */
-        .tech-statement .mission-statement {
-            margin: 0 auto;
-            max-width: 1960px;
-            font-size: clamp(45px, 2.5vw, 55px);
-            font-weight: 700;
-            line-height: 1.3;
-            letter-spacing: -0.5px;
-        }
-
-        .tech-banner .graphic-slot.has-frames {
-            padding: 0;
-            background: none;
-            border: none;
-        }
-
-        .tech-banner .graphic-slot.has-frames::before {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -300,18 +238,6 @@
                 <div class="graphic-slot" data-panel="release" data-graphic="03" data-frames="Ourtech/03_release" data-frame-count="126">
                     <div class="slot-icon">03</div>
                     <div class="slot-label">Graphic placeholder — release visual</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tech-banner-pin">
-            <div class="tech-banner">
-                <div class="tech-statement">
-                    <h2 class="mission-statement"> On-demand, portable & scalable.</h2>
-                </div>
-                <div class="graphic-slot" data-graphic="04" data-frames="Ourtech/05_Overview" data-frame-count="125">
-                    <div class="slot-icon">▣</div>
-                    <div class="slot-label">Graphic placeholder — full-width visual</div>
                 </div>
             </div>
         </div>
@@ -489,110 +415,6 @@
                     if (players.overview) players.overview.play();
                 });
             });
-        });
-    </script>
-    <script defer>
-        document.addEventListener('DOMContentLoaded', function () {
-            function pad4(n) {
-                n = String(n);
-                while (n.length < 4) n = '0' + n;
-                return n;
-            }
-
-            function clamp01(v) {
-                return Math.min(Math.max(v, 0), 1);
-            }
-
-            /* 0 at the top of a tall wrapper's scroll runway, 1 at the
-               bottom — used for pinned (position: sticky) sections, where
-               the page holds still while this fraction goes 0 → 1. */
-            function pinProgress(wrapperRect) {
-                var scrollable = wrapperRect.height - window.innerHeight;
-                return scrollable > 0 ? clamp01(-wrapperRect.top / scrollable) : 0;
-            }
-
-            /* The full-width banner pins in place (see .tech-banner-pin/
-               .tech-banner in <style>) and scrubs through all frames in
-               the folder as the page holds there, only releasing once
-               the sequence is done. The tech-statement layered behind it
-               (lower z-index, shows through the frames' transparent
-               areas) slides up into place, driven directly by scroll
-               position, once revealFrame is passed. */
-            var pinWrap = document.querySelector('.tech-banner-pin');
-            var panel = document.querySelector('.tech-banner .graphic-slot[data-frames]');
-            var statement = document.querySelector('.tech-banner .tech-statement');
-            var revealFrame = 60; // frame number (1-indexed, matching the file names) after which the statement starts revealing
-            if (panel && pinWrap) {
-                var folder = panel.dataset.frames;
-                var frameCount = parseInt(panel.dataset.frameCount, 10);
-
-                panel.classList.add('has-frames');
-                panel.innerHTML = '';
-                var canvas = document.createElement('canvas');
-                canvas.className = 'stage-canvas';
-                panel.appendChild(canvas);
-                var ctx = canvas.getContext('2d');
-                ctx.imageSmoothingEnabled = true;
-                ctx.imageSmoothingQuality = 'high';
-
-                var frames = new Array(frameCount);
-                var loaded = new Array(frameCount);
-                var currentDrawn = -1;
-
-                for (var i = 0; i < frameCount; i++) {
-                    (function (i) {
-                        var img = new Image();
-                        img.onload = function () {
-                            loaded[i] = true;
-                            if (i === 0) draw(0);
-                        };
-                        img.src = folder + '/' + pad4(i + 1) + '.webp';
-                        frames[i] = img;
-                    })(i);
-                }
-
-                var draw = function (index) {
-                    if (index === currentDrawn) return;
-                    var img = frames[index];
-                    if (!img || !loaded[index] || !canvas.width) return;
-                    currentDrawn = index;
-                    var cw = canvas.width, ch = canvas.height;
-                    var scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-                    var dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
-                    ctx.clearRect(0, 0, cw, ch);
-                    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-                };
-
-                var scrubBanner = function () {
-                    var progress = pinProgress(pinWrap.getBoundingClientRect());
-                    var index = Math.round(progress * (frameCount - 1));
-                    while (index > 0 && !loaded[index]) index--;
-                    draw(index);
-
-                    if (statement) {
-                        var revealSpan = Math.max(frameCount - revealFrame, 1);
-                        var revealProgress = clamp01(((index + 1) - revealFrame) / revealSpan);
-                        var startX = -100; // % translateX before revealFrame (parked off-screen left)
-                        var endX = -12;      // % translateX once the sequence finishes — change this to land somewhere other than its natural flex-start position
-                        statement.style.transform = 'translateX(' + (startX + revealProgress * (endX - startX)) + '%)';
-                    }
-                };
-
-                var resizeCanvas = function () {
-                    var dpr = window.devicePixelRatio || 1;
-                    canvas.width = panel.clientWidth * dpr;
-                    canvas.height = panel.clientHeight * dpr;
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
-                    currentDrawn = -1;
-                    scrubBanner();
-                };
-
-                window.addEventListener('scroll', scrubBanner, { passive: true });
-                window.addEventListener('resize', resizeCanvas);
-                resizeCanvas();
-            }
-
         });
     </script>
 </body>
