@@ -28,6 +28,19 @@
             text-align: center;
         }
 
+        /* Only this page's nav text defaults to dark navy (for contrast
+           against the light hero photo behind it, on desktop) until
+           header.scrolled makes it white. The mobile drawer always has a
+           dark background regardless of scroll position though, so that
+           same dark-navy default is nearly invisible there — force white
+           on mobile independent of scroll state. */
+        @media (max-width: 992px) {
+            nav ul li a {
+                color: #ffffff;
+                opacity: 0.85;
+            }
+        }
+
         .wave-overlay {
             position: fixed;
             inset: 0;
