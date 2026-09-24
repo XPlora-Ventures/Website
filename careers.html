@@ -75,6 +75,66 @@
             line-height: 1.6;
         }
 
+        /* Open roles reuse the shared .accordion pattern (styles.css) —
+           just a title-group wrapper so each head can carry a meta line
+           (location / employment type) under the role title. */
+        .accordion-title-group {
+            flex: 1;
+        }
+
+        .accordion-head h3 {
+            margin: 0;
+        }
+
+        .role-meta {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--cyan-light);
+            opacity: 0.7;
+            font-weight: 400;
+        }
+
+        .accordion-panel-inner p {
+            margin-bottom: 20px;
+        }
+
+        .accordion-panel-inner h4 {
+            margin: 24px 0 10px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .accordion-panel-inner h4:first-child {
+            margin-top: 0;
+        }
+
+        .accordion-panel-inner ul {
+            margin: 0 0 20px;
+            padding-left: 20px;
+        }
+
+        .accordion-panel-inner li {
+            margin-bottom: 8px;
+        }
+
+        .accordion-panel-inner li:last-child {
+            margin-bottom: 0;
+        }
+
+        .accordion-panel-inner .closing-date {
+            margin-bottom: 0;
+            font-size: 13px;
+            color: var(--orange);
+            opacity: 0.9;
+        }
+
+        .accordion-panel-inner .btn {
+            margin-top: 20px;
+        }
+
         /* --- Register your interest --- */
         .cv-section {
             padding: 140px 8%;
@@ -154,26 +214,85 @@
         <span class="eyebrow fade-up">Careers</span>
         <h2 class="fade-up" style="--reveal-delay:0.05s">Current openings</h2>
 
-        <!-- No roles are open right now. When one opens, add it here as
-             an accordion item — same expand/collapse pattern already used
-             elsewhere on the site (e.g. the "How it works" page), and the
+        <!-- Each open role is an accordion item — the expand/collapse
              click handler in main.js already supports any .accordion group
-             with zero extra JS. Example:
+             with zero extra JS. Add/remove items here as roles open and
+             close; when none are open, restore the .roles-empty paragraph
+             that used to live here instead. -->
         <div class="accordion">
-            <div class="accordion-item">
+            <div class="accordion-item fade-up" style="--reveal-delay:0.1s">
                 <div class="accordion-head">
                     <div class="accordion-num">1</div>
-                    <h3>Role Title</h3>
+                    <div class="accordion-title-group">
+                        <h3>Independent Director</h3>
+                    </div>
                     <div class="accordion-plus"><span></span><span></span></div>
                 </div>
                 <div class="accordion-panel">
-                    <div class="accordion-panel-inner">Role description, requirements, and how to apply.</div>
+                    <div class="accordion-panel-inner">
+                        <p>Xplora is looking to appoint an independent director to help us commercialise our deep-tech energy platform and build the next stage of the company.</p>
+                        <p>We are particularly interested in someone who has personally taken a deep-tech hardware, industrial or climate/energy technology through the difficult journey from minimum viable technology to customer validation, product-market fit and repeatable commercial adoption.</p>
+                        <p>The distinctive capability we are looking to add to the board is hands-on commercialisation experience: someone who knows how to identify the market that really matters, turn early customer interest into meaningful validation and pilots, and build the partnerships and channels required for an emerging hardware technology to scale.</p>
+                        <p>Ideally, you will have experience working with industrial customers and/or OEMs, understand how customer requirements should shape product and technical priorities, and be comfortable challenging a technical team on where limited time and capital should be focused. Experience navigating long industrial sales cycles, design partnerships and the transition from pilots to repeatable adoption would be particularly valuable.</p>
+                        <p>Strong startup governance experience is important, as is an understanding of the realities of building a capital-constrained deep-tech company. If this sounds like you, or someone you would recommend, I'd welcome a confidential introduction.</p>
+                        <a href="mailto:nan@xploraventures.com?subject=Application%20%E2%80%94%20Independent%20Director" class="btn">Connect with Me</a>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item fade-up" style="--reveal-delay:0.15s">
+                <div class="accordion-head">
+                    <div class="accordion-num">2</div>
+                    <div class="accordion-title-group">
+                        <h3>Senior Materials Scientist</h3>
+                        <p class="role-meta">Gracefield Innovation Quarter, Wellington (On-site) · Full-time</p>
+                    </div>
+                    <div class="accordion-plus"><span></span><span></span></div>
+                </div>
+                <div class="accordion-panel">
+                    <div class="accordion-panel-inner">
+                        <h4>About the role</h4>
+                        <p>Xplora is a deep-tech startup developing next-generation heat storage for sustainable energy applications. Our vision is to move energy beyond boundaries — of time and place. We are seeking a motivated Senior Materials Scientist to support the development, optimisation, testing, and scale-up of advanced functional materials.</p>
+                        <p>This role provides hands-on experience working on real scientific challenges, from material formulation and performance evaluation to scale-up and technology development, while contributing to commercially relevant R&amp;D.</p>
+                        <p>If you're curious, hands-on, and hungry to grow, this might be the role you've been waiting for. We value people who are:</p>
+                        <ul>
+                            <li><strong>Humble</strong> — open to learning, self-aware, and collaborative</li>
+                            <li><strong>Hungry</strong> — driven to build, explore, and get stuff done</li>
+                            <li><strong>Smart</strong> — emotionally and interpersonally intelligent</li>
+                        </ul>
+
+                        <h4>What you'll do</h4>
+                        <p>At Xplora, we are developing a novel composite material for use in thermochemical energy storage — a system that uses reversible chemical reactions to store heat and release it on demand, with minimal loss over time. Your mission is to help design, validate, optimise and scale up this material so it:</p>
+                        <ul>
+                            <li>Achieves high energy density</li>
+                            <li>Maintains stable performance over multiple charge/discharge cycles</li>
+                            <li>Operates within target regeneration temperatures and heat output</li>
+                            <li>Retains robust structural integrity during repeated cycling</li>
+                        </ul>
+                        <p>You'll also play a key role in translating material discoveries into manufacturable components for reactor integration.</p>
+
+                        <h4>Ideal candidate</h4>
+                        <ul>
+                            <li>Master's or PhD degree in Materials Science, Chemistry, or a related discipline</li>
+                            <li>3+ years working experience in a material-related field</li>
+                            <li>Experience in porous materials, adsorption technologies, thermochemical reactions, gas-solid systems, and sustainable energy applications</li>
+                            <li>Hands-on experience with material formulation, processing, and performance evaluation</li>
+                            <li>Familiarity with structure–property relationships in porous materials, including sorption/desorption behaviour, material stability, and heat/mass transfer</li>
+                            <li>Understanding of reaction kinetics and thermodynamics, especially for endothermic/exothermic cycling processes</li>
+                            <li>Proficiency with characterisation techniques such as gas sorption analysis, PXRD, DSC/TGA, SEM, and microscopy is advantageous</li>
+                            <li>Experience with pellet production, reactor testing, process scale-up, numerical modelling, or experimental system development is beneficial</li>
+                        </ul>
+
+                        <h4>Why join us</h4>
+                        <p>At Xplora, you won't just observe innovation — you'll be part of building it. We are tackling complex energy challenges through the development of next-generation materials and technologies, where every experiment, insight, and improvement contributes to a larger mission. As part of our team, you will gain hands-on experience working on meaningful R&amp;D projects, collaborate with scientists and engineers, and see how ideas move from the laboratory towards real-world applications.</p>
+                        <p>We value courage, ownership, and growth. We are looking for people who enjoy solving challenging problems, are eager to learn, and want to contribute to building technology that can make a lasting impact.</p>
+                        <p>If this excites you, we'd love to hear from you!</p>
+
+                        <p class="closing-date">Applications close 18 October, 11:59pm NZT.</p>
+                        <a href="https://nz.seek.com/job/94849638?ref=cm-ui" class="btn" target="_blank" rel="noopener">Apply via SEEK</a>
+                    </div>
                 </div>
             </div>
         </div>
-        -->
-
-        <p class="roles-empty fade-up" style="--reveal-delay:0.1s">There are no open roles right now.</p>
     </section>
 
     <!-- Register your interest -->

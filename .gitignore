@@ -6,3 +6,7 @@ newsroom/*_files/
 video/
 Cloud.png*.png
 Energy.html
+
+# Source docx/txt handoff files for careers copy — content already
+# transcribed into careers.html, not used by the live site.
+Career/Opennings/
