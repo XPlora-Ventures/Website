@@ -91,7 +91,8 @@
             border-color: var(--orange);
         }
 
-        .contact-form button {
+        .contact-form button,
+        .contact-form .h-captcha {
             align-self: center;
         }
 
@@ -153,6 +154,12 @@
                     <input type="text" name="name" placeholder="Your name" required>
                     <input type="email" name="email" placeholder="Your email address" required>
                     <textarea name="message" placeholder="Your message" required></textarea>
+                    <!-- Spam protection: hidden honeypot (bots tick it, Web3Forms
+                         drops the submission) + hCaptcha via Web3Forms' free
+                         shared sitekey. hCaptcha must be enabled for this form
+                         in the Web3Forms dashboard. -->
+                    <input type="checkbox" name="botcheck" style="display: none;" tabindex="-1" autocomplete="off">
+                    <div class="h-captcha" data-captcha="true" data-theme="dark"></div>
                     <button type="submit" class="btn">Send message</button>
                 </form>
                 <p class="contact-status" id="contactStatus" aria-live="polite"></p>
@@ -202,14 +209,25 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
     <script defer src="main.js"></script>
+    <script src="https://web3forms.com/client/script.js" async defer></script>
     <script defer>
         document.addEventListener('DOMContentLoaded', function () {
             var form = document.getElementById('contactForm');
             var status = document.getElementById('contactStatus');
             if (!form) return;
 
+            // hCaptcha tokens are single-use, so reset the widget after every attempt
+            function resetCaptcha() {
+                if (window.hcaptcha) window.hcaptcha.reset();
+            }
+
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
+                var captcha = form.querySelector('textarea[name="h-captcha-response"]');
+                if (!captcha || !captcha.value) {
+                    status.textContent = 'Please complete the captcha before sending.';
+                    return;
+                }
                 status.textContent = 'Sending…';
 
                 fetch('https://api.web3forms.com/submit', {
@@ -222,9 +240,11 @@
                         if (!data.success) throw new Error(data.message || 'Request failed');
                         status.textContent = "Thanks — we'll be in touch soon.";
                         form.reset();
+                        resetCaptcha();
                     })
                     .catch(function () {
                         status.textContent = 'Something went wrong — please email us directly at hello@xploraventures.com.';
+                        resetCaptcha();
                     });
             });
         });
